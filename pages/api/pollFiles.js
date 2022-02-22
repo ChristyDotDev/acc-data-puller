@@ -24,7 +24,10 @@ export default async function handler(req, res) {
     .select('timestamp')
     .order('timestamp', { ascending: false })
     .limit(1)
-  const maxDateString = maxTs?.data[0]?.timestamp ?? "2000-01-01"
+  let maxDateString = "2000-01-01"
+  if (maxTs?.data){
+    maxDateString =maxTs?.data[0]?.timestamp
+  }
   const maxDate = new Date(maxDateString);
 
   const client = new ftp.Client()
