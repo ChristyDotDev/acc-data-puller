@@ -23,7 +23,7 @@ jobs:
         POLLER_URL: ${{ secrets.POLLER_URL }}
       uses: fjogeleit/http-request-action@master
       with:
-        url: "${{ POLLER_URL }}"
+        url: ${{ POLLER_URL }}
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
