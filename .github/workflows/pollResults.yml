@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
   
 env:
-  POLLER_URL: ${{ secrets.POLLER_URL }}
+  POLLER_URL: ${{ env.POLLER_URL }}
 
 jobs:
   deployment:
