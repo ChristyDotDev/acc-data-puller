@@ -41,7 +41,7 @@ export default async function handler(req, res) {
 
   results_files.forEach(async (file) => {
     const resultsFile = await getFileContents(file.id)
-    console.log(JSON.stringify(resultsFile))
+    console.log(resultsFile)
     //TODO - parse results contents
     //TODO - store results in database
     //TODO - mark storage as done

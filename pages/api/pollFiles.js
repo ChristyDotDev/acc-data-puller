@@ -23,14 +23,15 @@ export default async function handler(req, res) {
   const maxTs = await supabase.from('results_files')
     .select('timestamp')
     .order('timestamp', { ascending: false })
-    .limit(1)
-  let maxDateString = "2000-01-01"
+    .limit(1);
+  let maxDateString = "2000-01-01";
   if (maxTs?.data){
-    maxDateString =maxTs?.data[0]?.timestamp
+    maxDateString =maxTs?.data[0]?.timestamp;
   }
   const maxDate = new Date(maxDateString);
+  console.log(`Getting files newer than ${maxDate}`);
 
-  const client = new ftp.Client()
+  const client = new ftp.Client();
   try {
     await client.access({
         secure: true,
@@ -39,7 +40,7 @@ export default async function handler(req, res) {
         user: `${process.env.RACE_DATA_FTP_USER}`,
         password: `${process.env.RACE_DATA_FTP_PASS}`,
         secureOptions: {rejectUnauthorized:false}
-    })
+    });
     const files = await client.list(process.env.RACE_DATA_FTP_REMOTE_DIR);
     
     const wanted = files.map(f => {
@@ -47,19 +48,19 @@ export default async function handler(req, res) {
     }).filter(f => {
       return f.timestamp > maxDate;
     });
-    //TODO - only insert not there
+    console.log(`Found ${wanted.length} files newer than ${maxDate}`);
     if(wanted.length > 0){
       await supabase.from("results_files").upsert(wanted).then(r => {
-        console.log(r)
+        console.log(r);
       });
     }
+    res.status(200).json({ status: "OK" });
   } catch(err) {
-      console.log(err)
+      console.log(err);
+      res.status(500).json({ status: "Unexpected Error: Check the lambda logs" });
   } finally {
     client.close();
   }
-  
-  //TODO - add files wanted to DB or queue
 
-  res.status(200).json({ status: "OK" });
+  
 }
