@@ -14,10 +14,16 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy Stage
+    - name: Dump secret
+      env:
+        POLLER_URL: ${{ secrets.POLLER_URL }}
+      run: echo "$POLLER_URL"
+    - name: Call poller lambda
+      env:
+          POLLER_URL: ${{ secrets.POLLER_URL }}
       uses: fjogeleit/http-request-action@master
       with:
-        url: "${{ secrets.POLLER_URL }}"
+        url: "${{ POLLER_URL }}"
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
