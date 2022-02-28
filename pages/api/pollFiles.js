@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     .order('timestamp', { ascending: false })
     .limit(1);
   let maxDateString = "2000-01-01";
-  if (maxTs?.data){
+  if (maxTs?.data[0]?.timestamp) {
     maxDateString =maxTs?.data[0]?.timestamp;
   }
   const maxDate = new Date(maxDateString);
