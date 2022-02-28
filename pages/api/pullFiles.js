@@ -41,7 +41,7 @@ export default async function handler(req, res) {
 
   results_files.forEach(async (file) => {
     const resultsFile = await getFileContents(file.id)
-    console.log(resultsFile)
+    console.log(`Parsing ${resultsFile.sessionType} from ${resultsFile.trackName}}`);
     //TODO - parse results contents
     //TODO - store results in database
     //TODO - mark storage as done
