@@ -20,7 +20,7 @@ jobs:
       run: echo "$POLLER_URL"
     - name: Call poller lambda
       env:
-          POLLER_URL: ${{ secrets.POLLER_URL }}
+        POLLER_URL: ${{ secrets.POLLER_URL }}
       uses: fjogeleit/http-request-action@master
       with:
         url: "${{ POLLER_URL }}"
