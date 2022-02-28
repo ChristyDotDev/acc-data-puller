@@ -17,7 +17,7 @@ jobs:
     - name: Deploy Stage
       uses: fjogeleit/http-request-action@master
       with:
-        url: ${{ secrets.POLLER_URL }}
+        url: "${{ secrets.POLLER_URL }}"
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
