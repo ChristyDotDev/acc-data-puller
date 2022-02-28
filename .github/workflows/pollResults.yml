@@ -16,11 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Dump secret
-      run: echo "${{ secrets.POLLER_URL }}"
+      run: echo "${{ env.POLLER_URL }}"
     - name: Call poller lambda
       uses: fjogeleit/http-request-action@master
       with:
-        url:  ${{ secrets.POLLER_URL }}
+        url:  ${{ env.POLLER_URL }}
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
