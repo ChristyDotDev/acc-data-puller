@@ -9,20 +9,18 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  
-env:
-  POLLER_URL: ${{ env.POLLER_URL }}
+
 
 jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
     - name: Dump secret
-      run: echo "$POLLER_URL"
+      run: echo "${{ secrets.POLLER_URL }}"
     - name: Call poller lambda
       uses: fjogeleit/http-request-action@master
       with:
-        url: "$POLLER_URL"
+        url:  ${{ secrets.POLLER_URL }}
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
