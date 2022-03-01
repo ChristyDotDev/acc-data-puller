@@ -2,7 +2,7 @@ name: Kickoff Poller
 
 on:
   schedule:
-    - cron: "*/60 * * * *"
+    - cron: "0 * * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -12,8 +12,6 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-    - name: Dump secret
-      run: echo "${{ secrets.POLLER_URL }}"
     - name: Call poller lambda
       uses: fjogeleit/http-request-action@master
       with:
