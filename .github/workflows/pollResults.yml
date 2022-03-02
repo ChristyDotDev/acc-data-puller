@@ -2,7 +2,7 @@ name: Kickoff Poller
 
 on:
   schedule:
-    - cron: "0 16,18,20,22,0 * * *"
+    - cron: "*/15 * * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -19,3 +19,4 @@ jobs:
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
+        ignoreStatusCodes: '500'
