@@ -1,5 +1,6 @@
 const ftp = require("basic-ftp")
 const stream = require('stream');
+import { readFile, readFileSync } from 'fs';
 import { createClient } from '@supabase/supabase-js'
 
 async function getFileContents(filename){
@@ -12,16 +13,9 @@ async function getFileContents(filename){
         password: `${process.env.RACE_DATA_FTP_PASS}`,
         secureOptions: {rejectUnauthorized:false}
     })
-    let fileContents = "";
-    const writable = new stream.Writable({
-      write: function(chunk, encoding, next) {
-        fileContents += chunk.toString();
-        next();
-      }
-    });
-    await client.downloadTo(writable, process.env.RACE_DATA_FTP_REMOTE_DIR + filename);
-    //TODO - think encoding is fucked here, detect and parse properly?
-    return fileContents;
+    await client.downloadTo(`./_tmp${filename}`, process.env.RACE_DATA_FTP_REMOTE_DIR + filename)
+    const fileContents = await readFileSync(`./_tmp${filename}`, 'utf16le');
+    return JSON.parse(fileContents);
 }
 
 export default async function handler(req, res) {
@@ -37,11 +31,11 @@ export default async function handler(req, res) {
     //.like('id', '%_R.json') - just for when we want to specifically test certain types
     .order('timestamp', { ascending: false })
     .limit(1)
-  
-  console.log(results_files)
 
   results_files.forEach(async (file) => {
-    const resultsFile = await getFileContents(file.id)
+    const fileContents = await getFileContents(file.id)
+    console.log(`Pulled ${fileContents.sessionType} session ${file.id} @${fileContents.trackName}`)
+
     //TODO - parse results contents
     //TODO - store results in database
     //TODO - mark storage as done
