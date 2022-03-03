@@ -16,6 +16,7 @@ async function getFileContents(filename){
     const downloadResult = await client.downloadTo(`./_tmp${filename}`, process.env.RACE_DATA_FTP_REMOTE_DIR + filename)
     console.log(downloadResult)
     const fileContents = await readFileSync(`./_tmp${filename}`, 'utf16le');
+    //TODO - go back to reading from memory
     return JSON.parse(fileContents);
 }
 
