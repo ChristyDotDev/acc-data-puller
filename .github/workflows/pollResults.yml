@@ -12,8 +12,6 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-    - name: Dump secret
-      run: echo "${{ secrets.POLLER_URL }}"
     - name: Call poller lambda
       uses: fjogeleit/http-request-action@master
       with:
@@ -21,3 +19,4 @@ jobs:
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
+        ignoreStatusCodes: '500'
