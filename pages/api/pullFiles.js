@@ -32,6 +32,8 @@ export default async function handler(req, res) {
     .order('timestamp', { ascending: false })
     .limit(1)
 
+  console.log(results_files)
+
   results_files.forEach(async (file) => {
     const fileContents = await getFileContents(file.id)
     console.log(`Pulled ${fileContents.sessionType} session ${file.id} @${fileContents.trackName}`)
