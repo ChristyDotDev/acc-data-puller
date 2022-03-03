@@ -13,7 +13,8 @@ async function getFileContents(filename){
         password: `${process.env.RACE_DATA_FTP_PASS}`,
         secureOptions: {rejectUnauthorized:false}
     })
-    await client.downloadTo(`./_tmp${filename}`, process.env.RACE_DATA_FTP_REMOTE_DIR + filename)
+    const downloadResult = await client.downloadTo(`./_tmp${filename}`, process.env.RACE_DATA_FTP_REMOTE_DIR + filename)
+    console.log(downloadResult)
     const fileContents = await readFileSync(`./_tmp${filename}`, 'utf16le');
     return JSON.parse(fileContents);
 }
