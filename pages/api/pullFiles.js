@@ -40,6 +40,34 @@ export default async function handler(req, res) {
     const fileContents = await getFileContents(file.id)
     console.log(`Pulled ${fileContents.sessionType} session ${file.id} @${fileContents.trackName}`)
 
+    if (fileContents.sessionType.startsWith('FP')){
+      console.log('FP session')
+      console.log(fileContents.sessionResult)
+      const isWet = fileContents.sessionResult.isWetSession;
+      console.log(fileContents.sessionResult)
+      fileContents.sessionResult.leaderBoardLines.map(async (line) => {
+        const timeTrialEntry = {
+          session_track: fileContents.trackName,
+          session_is_wet: isWet,
+          session_timestamp: file.timestamp,
+          driver_id: line.currentDriver.playerId,
+          driver_first_name: line.currentDriver.firstName,
+          driver_last_name: line.currentDriver.lastName,
+          driver_short_name: line.currentDriver.shortName,
+          bestLap :line.timing.bestLap,
+          carModel: line.car.carModel
+        }
+        console.log(timeTrialEntry)
+        const laps = {
+          session_track: fileContents.trackName,
+          session_timestamp: file.timestamp,
+          driver_id: line.currentDriver.playerId,
+          totalLaps: line.timing.lapCount,
+        }
+        console.log(line.timing)
+        console.log(laps)
+      });
+    }
     //TODO - parse results contents
     //TODO - store results in database
     //TODO - mark storage as done
