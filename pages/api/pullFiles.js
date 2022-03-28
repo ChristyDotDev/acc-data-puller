@@ -16,7 +16,6 @@ async function getFileContents(filename){
     const downloadResult = await client.downloadTo(`./_tmp${filename}`, process.env.RACE_DATA_FTP_REMOTE_DIR + filename)
     console.log(downloadResult)
     const fileContents = await readFileSync(`./_tmp${filename}`, 'utf16le');
-    //TODO - go back to reading from memory
     return JSON.parse(fileContents);
 }
 
@@ -30,22 +29,20 @@ export default async function handler(req, res) {
     .from('results_files')
     .select("*")
     .eq('status', 'WANT')
-    //.like('id', '%_R.json') - just for when we want to specifically test certain types
+    //.like('id', '%_FP%.json') //- just for when we want to specifically test certain types
     .order('timestamp', { ascending: false })
-    .limit(1)
+    .limit(15)
 
   console.log(results_files)
 
   results_files.forEach(async (file) => {
     const fileContents = await getFileContents(file.id)
-    console.log(`Pulled ${fileContents.sessionType} session ${file.id} @${fileContents.trackName}`)
-
-    if (fileContents.sessionType.startsWith('FP')){
+    //console.log(`Pulled ${fileContents.sessionType} session ${file.id} @${fileContents.trackName}`)
+    console.log(fileContents.laps.length)
+    if (fileContents.sessionType.startsWith('FP') & fileContents.laps.length > 0){
       console.log('FP session')
-      console.log(fileContents.sessionResult)
       const isWet = fileContents.sessionResult.isWetSession;
-      console.log(fileContents.sessionResult)
-      fileContents.sessionResult.leaderBoardLines.map(async (line) => {
+      const ttEntries = fileContents.sessionResult.leaderBoardLines.map((line) => {
         const timeTrialEntry = {
           session_track: fileContents.trackName,
           session_is_wet: isWet,
@@ -57,21 +54,29 @@ export default async function handler(req, res) {
           bestLap :line.timing.bestLap,
           carModel: line.car.carModel
         }
-        console.log(timeTrialEntry)
-        const laps = {
-          session_track: fileContents.trackName,
-          session_timestamp: file.timestamp,
-          driver_id: line.currentDriver.playerId,
-          totalLaps: line.timing.lapCount,
-        }
-        console.log(line.timing)
-        console.log(laps)
+        return timeTrialEntry;
+      }).filter((entry) => {
+        return entry.bestLap !== 2147483647
       });
+      if (ttEntries.length > 0){
+        const { data: savedLaps, error } = await supabase
+            .from('time_trial_laps')
+            .upsert(ttEntries);
+        if (error){
+          console.log(error)
+          console.log(ttEntries)
+        }
+      }
+      console.log(`Updated ${file.id}`)
     }
-    //TODO - parse results contents
-    //TODO - store results in database
-    //TODO - mark storage as done
-    //await supabase.from('results_files').update(file.id, {status: "DONE"})
+    const { data: updated, error } = await supabase
+      .from('results_files')
+      .update({status: 'DONE'})
+      .eq('id', file.id)
+    if (error){
+      console.log(error)
+    }
+    console.log(updated)
   });
 
   res.status(200).json({ status: "OK" });
