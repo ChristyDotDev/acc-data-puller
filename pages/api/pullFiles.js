@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     .eq('status', 'WANT')
     //.like('id', '%_FP%.json') //- just for when we want to specifically test certain types
     .order('timestamp', { ascending: false })
-    .limit(1)
+    .limit(15)
 
   console.log(results_files)
 
