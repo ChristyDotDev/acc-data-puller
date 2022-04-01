@@ -13,9 +13,14 @@ async function getFileContents(filename){
         password: `${process.env.RACE_DATA_FTP_PASS}`,
         secureOptions: {rejectUnauthorized:false}
     })
-    const downloadResult = await client.downloadTo(`./_tmp${filename}`, process.env.RACE_DATA_FTP_REMOTE_DIR + filename)
-    console.log(downloadResult)
-    const fileContents = await readFileSync(`./_tmp${filename}`, 'utf16le');
+    let fileContents = "";
+    const writable = new stream.Writable({
+      write: function(chunk, encoding, next) {
+        fileContents += chunk.toString('utf16le');
+        next();
+      }
+    });
+    await client.downloadTo(writable, process.env.RACE_DATA_FTP_REMOTE_DIR + filename);
     return JSON.parse(fileContents);
 }
 
@@ -37,7 +42,6 @@ export default async function handler(req, res) {
 
   results_files.forEach(async (file) => {
     const fileContents = await getFileContents(file.id)
-    //console.log(`Pulled ${fileContents.sessionType} session ${file.id} @${fileContents.trackName}`)
     console.log(fileContents.laps.length)
     if (fileContents.sessionType.startsWith('FP') & fileContents.laps.length > 0){
       const ttEntries = fileContents.sessionResult.leaderBoardLines.map((line) => {
