@@ -40,12 +40,10 @@ export default async function handler(req, res) {
     //console.log(`Pulled ${fileContents.sessionType} session ${file.id} @${fileContents.trackName}`)
     console.log(fileContents.laps.length)
     if (fileContents.sessionType.startsWith('FP') & fileContents.laps.length > 0){
-      console.log('FP session')
-      const isWet = fileContents.sessionResult.isWetSession;
       const ttEntries = fileContents.sessionResult.leaderBoardLines.map((line) => {
         const timeTrialEntry = {
           session_track: fileContents.trackName,
-          session_is_wet: isWet,
+          session_is_wet: fileContents.sessionResult.isWetSession,
           session_timestamp: file.timestamp,
           driver_id: line.currentDriver.playerId,
           driver_first_name: line.currentDriver.firstName,
