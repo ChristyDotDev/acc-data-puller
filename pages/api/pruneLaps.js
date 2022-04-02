@@ -1,6 +1,3 @@
-const ftp = require("basic-ftp")
-const stream = require('stream');
-import { readFile, readFileSync } from 'fs';
 import { createClient } from '@supabase/supabase-js'
 
 export default async function handler(req, res) {
