@@ -15,7 +15,7 @@ jobs:
     - name: Call poller lambda
       uses: fjogeleit/http-request-action@master
       with:
-        url:  '${{ secrets.API_ROOT }}/pollFiles'
+        url:  '${{ secrets.API_ROOT }}/pollResults'
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
