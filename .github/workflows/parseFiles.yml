@@ -15,7 +15,7 @@ jobs:
     - name: Call file parser lambda
       uses: fjogeleit/http-request-action@master
       with:
-        url:  ${{ secrets.PULLER_URL }}
+        url:  '${{ secrets.API_ROOT }}/parseFiles'
         method: 'GET'
         timeout: 30000
         preventFailureOnNoResponse: true
