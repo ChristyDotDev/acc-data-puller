@@ -34,7 +34,7 @@ INSERT INTO car (id,class,name,year) VALUES (50,'GT4', 'Alpine A110 GT4',2018) O
 INSERT INTO car (id,class,name,year) VALUES (51,'GT4', 'Aston Martin Vantage GT4',2018) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,class,name,year) VALUES (52,'GT4', 'Audi R8 LMS GT4',2018) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,class,name,year) VALUES (53,'GT4', 'BMW M4 GT4',2018) ON CONFLICT (id) DO NOTHING;
-INSERT INTO car (id,class,name,year) VALUES (54,'GT4', 'Car 54 Where are you?',1961) ON CONFLICT (id) DO NOTHING;
+INSERT INTO car (id,class,name,year) VALUES (54,'C54', 'Car 54 Where are you?',1961) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,class,name,year) VALUES (55,'GT4', 'Chevrolet Camaro GT4',2017) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,class,name,year) VALUES (56,'GT4', 'Ginetta G55 GT4',2012) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,class,name,year) VALUES (57,'GT4', 'KTM X-Bow GT4',2016) ON CONFLICT (id) DO NOTHING;
