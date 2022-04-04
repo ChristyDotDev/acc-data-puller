@@ -54,13 +54,11 @@ export default async function handler(req, res) {
         console.log(r);
       });
     }
-    res.status(200).json({ status: "OK" });
   } catch(err) {
       console.log(err);
       res.status(500).json({ status: "Unexpected Error: Check the lambda logs" });
   } finally {
     client.close();
   }
-
-  
+  res.status(200).json({ status: "OK" });
 }
