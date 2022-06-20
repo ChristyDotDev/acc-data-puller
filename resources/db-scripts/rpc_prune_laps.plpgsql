@@ -1,0 +1,13 @@
+BEGIN
+DELETE FROM time_trial_laps WHERE id NOT IN (SELECT ttl.id FROM time_trial_laps ttl
+JOIN car ON car.id=time_trial_laps."carModel"
+JOIN 
+  (
+    SELECT session_track AS st, driver_id AS di, session_is_wet AS siw, MIN("bestLap") AS bl, car.class AS ccl FROM time_trial_laps JOIN car ON car.id=time_trial_laps."carModel" GROUP BY st,di,siw,ccl
+  ) AS ttl2
+ON ttl.session_track=st AND
+ttl.driver_id=di AND
+ttl.session_is_wet=siw AND
+car.class=ccl AND
+ttl."bestLap"=bl);
+END
