@@ -53,6 +53,9 @@ export default async function handler(req, res) {
       await supabase.from("results_files").upsert(wanted).then(r => {
         console.log(r);
       });
+      await supabase.from("results_files_elo").upsert(wanted).then(r => {
+        console.log(r);
+      });
     }
   } catch(err) {
       console.log(err);
