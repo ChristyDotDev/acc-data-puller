@@ -4,6 +4,8 @@ import { createClient } from '@supabase/supabase-js'
 const ftp = require("basic-ftp");
 const stream = require('stream');
 
+const DEFAULT_ELO = 1800;
+const ELO_K = 16;
 
 async function getFileContents(filename){
     const client = new ftp.Client()
@@ -47,7 +49,7 @@ async function getDriverElo(supabase){
 async function markFileDone(supabase, fileId){
     const { data: updated, error } = await supabase
         .from('results_files_elo')
-        .update({status: 'DONE'}) //TODO - MARK DONE
+        .update({status: 'DONE'})
         .eq('id', fileId)
     if (error){
         console.log(error)
@@ -55,8 +57,17 @@ async function markFileDone(supabase, fileId){
     console.log(updated);
 }
 
+async function persistElo(supabase, elo){
+    const { data: updated, error } = await supabase
+        .from('driver_elo')
+        .upsert(elo)
+    if (error){
+        console.log(error)
+    }
+}
+
 export default async function handler(req, res) {
-    console.log("Updating Elo Ratings")
+    console.log("Updating Elo Ratings...")
     const supabaseOptions = {
         schema: 'public',
     }
@@ -74,7 +85,7 @@ export default async function handler(req, res) {
         }
         const leaderboardLines = []
         for(const [index,lbl] of fileContents.sessionResult.leaderBoardLines.entries()){
-            const driverElo = eloBefore.find( ({ driver }) => driver.playerId == lbl.currentDriver.playerId );
+            const driverElo = eloBefore.find( ( driver ) => driver.playerId == lbl.currentDriver.playerId );
 
             leaderboardLines.push({
                 position: index,
@@ -82,19 +93,34 @@ export default async function handler(req, res) {
                 firstName: lbl.currentDriver.firstName,
                 lastName: lbl.currentDriver.lastName,
                 playerId: lbl.currentDriver.playerId,
-                elo: driverElo ? driverElo : 1800
+                elo: driverElo ? driverElo : DEFAULT_ELO
             });
         }
-        console.log(leaderboardLines)
         
-        //TODO - grab every racer's current ELO (with default/starting ELO if none found)
-        //TODO - calculate new ELO per racer
-        //TODO - persist new ELOs
-        //console.log(EloRating.calculate(2100, 1400));
-        //markFileDone(supabase, file.id);
+        leaderboardLines.forEach(async (driver) => {
+            leaderboardLines.forEach( (opponent) => {
+                if(driver.position < opponent.position){
+                    const newElo = EloRating.calculate(driver.elo, opponent.elo, true, ELO_K);
+                    driver.elo = newElo.playerRating
+                } else if(driver.position > opponent.position){
+                    const newElo = EloRating.calculate(opponent.elo, driver.elo, true, ELO_K);
+                    driver.elo = newElo.opponentRating
+                }
+            });
+        })
+        
+        const newElos = leaderboardLines.map((line) => {
+            return {
+                player_id:line.playerId,
+                short_name: line.shortName,
+                first_name: line.firstName,
+                last_name: line.lastName,
+                elo_rating: line.elo
+            }
+        });
+        persistElo(supabase, newElos);
+        markFileDone(supabase, file.id);
     });
-    
-
     
     console.log("Updated Elo Ratings")
     await res.status(200).send();
