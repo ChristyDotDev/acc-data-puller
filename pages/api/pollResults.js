@@ -33,8 +33,9 @@ export default async function handler(req, res) {
 
   const client = new ftp.Client();
   try {
+    console.log(process.env.RACE_DATA_FTP_SECURE)
     await client.access({
-        secure: true,
+        secure: process.env.RACE_DATA_FTP_SECURE == 'false' ? false : true,
         host: `${process.env.RACE_DATA_FTP_ADDRESS}`,
         port: process.env.RACE_DATA_FTP_PORT,
         user: `${process.env.RACE_DATA_FTP_USER}`,
