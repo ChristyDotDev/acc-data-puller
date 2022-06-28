@@ -1,12 +1,11 @@
 const ftp = require("basic-ftp")
 const stream = require('stream');
-import { readFile, readFileSync } from 'fs';
 import { createClient } from '@supabase/supabase-js'
 
 async function getFileContents(filename){
   const client = new ftp.Client()
     await client.access({
-        secure: true,
+        secure: process.env.RACE_DATA_FTP_SECURE == 'false' ? false : true,
         host: `${process.env.RACE_DATA_FTP_ADDRESS}`,
         port: process.env.RACE_DATA_FTP_PORT,
         user: `${process.env.RACE_DATA_FTP_USER}`,

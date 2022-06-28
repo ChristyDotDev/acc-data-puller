@@ -10,11 +10,11 @@
   "dependencies": {
     "@supabase/supabase-js": "^1.30.0",
     "basic-ftp": "^4.6.6",
+    "elo-rating": "1.0.1",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "stream": "^0.0.2",
-    "elo-rating": "1.0.1"
+    "stream": "^0.0.2"
   },
   "devDependencies": {
     "eslint": "8.8.0",
