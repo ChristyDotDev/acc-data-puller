@@ -33,7 +33,7 @@ async function getResultsFiles(supabase){
         .from('results_files_elo')
         .select("*")
         .eq('status', 'WANT')
-        .like('id', '%_R%.json') //- just for when we want to specifically test certain types
+        //.like('id', '%_R%.json') //- just for when we want to specifically test certain types
         .order('timestamp', { ascending: false })
         .limit(1);
     return results_files;
