@@ -33,7 +33,7 @@ async function getResultsFiles(supabase){
         .from('results_files_elo')
         .select("*")
         .eq('status', 'WANT')
-        //.like('id', '%_R%.json') //- just for when we want to specifically test certain types
+        .like('id', '%_R%.json') //- just for when we want to specifically test certain types
         .order('timestamp', { ascending: false })
         .limit(1);
     return results_files;
@@ -85,7 +85,8 @@ export default async function handler(req, res) {
         }
         const leaderboardLines = []
         for(const [index,lbl] of fileContents.sessionResult.leaderBoardLines.entries()){
-            const driverElo = eloBefore.find( ( driver ) => driver.playerId == lbl.currentDriver.playerId );
+            const driverElo = eloBefore.find( ( driver ) => driver.player_id == lbl.currentDriver.playerId);
+            console.log(driverElo)
 
             leaderboardLines.push({
                 position: index,
@@ -93,11 +94,13 @@ export default async function handler(req, res) {
                 firstName: lbl.currentDriver.firstName,
                 lastName: lbl.currentDriver.lastName,
                 playerId: lbl.currentDriver.playerId,
-                elo: driverElo ? driverElo : DEFAULT_ELO
+                elo: driverElo ? driverElo.elo_rating : DEFAULT_ELO,
+                races: driverElo ? driverElo.races : 0
             });
         }
         
-        leaderboardLines.forEach(async (driver) => {
+        leaderboardLines.forEach((driver) => {
+            driver.races = driver.races ? driver.races + 1 : 1;
             leaderboardLines.forEach( (opponent) => {
                 if(driver.position < opponent.position){
                     const newElo = EloRating.calculate(driver.elo, opponent.elo, true, ELO_K);
@@ -115,13 +118,13 @@ export default async function handler(req, res) {
                 short_name: line.shortName,
                 first_name: line.firstName,
                 last_name: line.lastName,
-                elo_rating: line.elo
+                elo_rating: line.elo,
+                races: line.races
             }
         });
         persistElo(supabase, newElos);
         markFileDone(supabase, file.id);
     });
-    
     console.log("Updated Elo Ratings")
     await res.status(200).send();
 }
