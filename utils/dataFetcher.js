@@ -34,3 +34,21 @@ export async function fetchTrackLeaderboard(trackId) {
     }
     return leaderboard;
 }
+
+export async function fetchEloRankings(trackId) {
+    const supabaseOptions = {
+        schema: 'public',
+    }
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, supabaseOptions)
+
+    const { data: leaderboard, error } = await supabase
+        .from('driver_elo')
+        .select("*")
+        .order('elo_rating', { ascending: false })
+    //TODO - only return best lap per user (and per car class? Wet/Dry?)
+
+    if (error) {
+        console.log(error)
+    }
+    return leaderboard;
+}
