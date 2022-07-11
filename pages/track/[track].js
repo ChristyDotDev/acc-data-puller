@@ -1,14 +1,24 @@
 import { Container } from "@chakra-ui/layout";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
-import { fetchTrackLeaderboard } from "../../utils/dataFetcher";
+import { fetchTrackLeaderboard, fetchCars } from "../../utils/dataFetcher";
 
 export async function getServerSideProps(context) {
   const leaderboard = await fetchTrackLeaderboard(context.params.track);
+  const cars = await fetchCars();
+  console.log(cars)
   const bestLaps = leaderboard.sort((a, b) => a.bestLap < b.bestLap ? - 1 : 1)  
-  return { props: { bestLaps: bestLaps } };
+  return { props: { bestLaps: bestLaps, cars: cars } };
 }
 
-export default function Track({ bestLaps }) {
+export default function Track({ bestLaps, cars }) {
+  function idToCarName(id){
+    const car = cars.find(c => c.id == id);
+    if (!car){
+      return "Car " + id
+    }
+    return car.name
+  }
+
   return (
     <Container maxW="750px" mt="20px">
       <Table mb="40px">
@@ -24,7 +34,7 @@ export default function Track({ bestLaps }) {
           {bestLaps.map((l) => (
             <Tr key={l.driver_short_name}>
               <Td>{l.driver_first_name} {l.driver_last_name}</Td>
-              <Td>{l.carModel}</Td>
+              <Td>{idToCarName(l.carModel)}</Td>
               <Td fontWeight="bold">{l.bestLap}</Td>
             </Tr>
           ))}
