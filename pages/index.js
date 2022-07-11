@@ -12,7 +12,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          ACC Data puller
+          Welcome to the F1diots ACC LFM knock-off
         </h1>
       </main>
     </div>
