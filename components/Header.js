@@ -1,19 +1,28 @@
 import { Flex, Heading } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 
-export default function Header() {
+function Header() {
   const router = useRouter();
   return (
     <Flex
-      p={3}
       borderBottom="2px"
-      borderColor="red.300"
-      cursor="pointer"
-      onClick={() => router.push("/")}
+      borderColor="brand.orange"
     >
-      <Heading as="h3" size="lg" m={1}>
-        F1diots
-      </Heading>
+      <Flex>
+        <Heading as="h3" size="lg" m={1} cursor="pointer" onClick={() => router.push("/")}>
+          F1diots
+        </Heading>
+      </Flex>
+      <Flex>
+        <Heading as="h6" size="sm" m={1} onClick={() => router.push("/track")} cursor="pointer">
+          Time Trial
+        </Heading>
+        <Heading as="h6" size="sm" m={1} onClick={() => router.push("/elo")} cursor="pointer">
+          Elo Rankings
+        </Heading>
+    </Flex>
     </Flex>
   );
 }
+
+export default Header
