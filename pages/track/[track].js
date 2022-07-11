@@ -5,7 +5,6 @@ import { fetchTrackLeaderboard, fetchCars } from "../../utils/dataFetcher";
 export async function getServerSideProps(context) {
   const leaderboard = await fetchTrackLeaderboard(context.params.track);
   const cars = await fetchCars();
-  console.log(cars)
   const bestLaps = leaderboard.sort((a, b) => a.bestLap < b.bestLap ? - 1 : 1)  
   return { props: { bestLaps: bestLaps, cars: cars } };
 }
@@ -17,6 +16,12 @@ export default function Track({ bestLaps, cars }) {
       return "Car " + id
     }
     return car.name
+  }
+
+  function toLapTime(millis){
+    const time = new Date(millis)
+    console.log(time)
+    return "" + time.getMinutes() + ":"+ time.getSeconds() + ":"+ time.getMilliseconds();
   }
 
   return (
@@ -35,7 +40,7 @@ export default function Track({ bestLaps, cars }) {
             <Tr key={l.driver_short_name}>
               <Td>{l.driver_first_name} {l.driver_last_name}</Td>
               <Td>{idToCarName(l.carModel)}</Td>
-              <Td fontWeight="bold">{l.bestLap}</Td>
+              <Td fontWeight="bold">{toLapTime(l.bestLap)}</Td>
             </Tr>
           ))}
         </Tbody>
