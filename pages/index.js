@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import LiveNow from '../components/LiveNow'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to the F1diots ACC LFM knock-off
         </h1>
+        <LiveNow/>
       </main>
     </div>
   )
