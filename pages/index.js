@@ -13,9 +13,8 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to the F1diots ACC LFM knock-off
+          Welcome to the F1diots ACC tracker
         </h1>
-        <LiveNow/>
       </main>
     </div>
   )
