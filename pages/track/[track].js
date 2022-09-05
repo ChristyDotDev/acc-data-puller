@@ -23,7 +23,7 @@ export default function Track({ bestLaps, cars }) {
     const minutes = "" + time.getMinutes()
     const seconds = "" + time.getSeconds()
     const milliPart = "" + time.getMilliseconds()
-    return "" + minutes + ":"+ seconds.padStart(2, '0') + ":"+ milliPart.padStart(2, '0');
+    return "" + minutes + ":"+ seconds.padStart(2, '0') + ":"+ milliPart.padStart(3, '0');
   }
 
   return (
