@@ -41,8 +41,8 @@ export default async function handler(req, res) {
 
   results_files.forEach(async (file) => {
     const fileContents = await getFileContents(file.id)
-    console.log(fileContents.laps.length)
-    if (fileContents.sessionType.startsWith('FP') & fileContents.laps.length > 0){
+    console.log(fileContents?.laps?.length)
+    if (fileContents?.sessionType?.startsWith('FP') & fileContents?.laps?.length > 0){
       const ttEntries = fileContents.sessionResult.leaderBoardLines.map((line) => {
         const timeTrialEntry = {
           session_track: fileContents.trackName,

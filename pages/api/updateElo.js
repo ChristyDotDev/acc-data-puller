@@ -34,7 +34,7 @@ async function getResultsFiles(supabase){
         .select("*")
         .eq('status', 'WANT')
         //.like('id', '%_R%.json') //- just for when we want to specifically test certain types
-        .order('timestamp', { ascending: false })
+        .order('timestamp', { ascending: true })
         .limit(1);
     return results_files;
 }
@@ -78,7 +78,7 @@ export default async function handler(req, res) {
     results_files.forEach(async (file) => {
         const fileContents = await getFileContents(file.id)
         console.log(`${fileContents.sessionType} @ ${fileContents.trackName}`);
-        if(!fileContents.sessionType.startsWith('R')){
+        if(!fileContents?.sessionType?.startsWith('R')){
             console.log(`Not a race, skipping...`);
             markFileDone(supabase, file.id);
             return;
