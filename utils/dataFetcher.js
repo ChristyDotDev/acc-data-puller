@@ -35,6 +35,22 @@ export async function fetchTrackLeaderboard(trackId) {
     return leaderboard;
 }
 
+export async function fetchCars() {
+    //TODO - cars
+    const supabaseOptions = {
+        schema: 'public',
+    }
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, supabaseOptions)
+
+    const { data: cars, error } = await supabase
+        .from('car')
+        .select("*");
+    if (error) {
+        console.log(error)
+    }
+    return cars;
+}
+
 export async function fetchEloRankings(trackId) {
     const supabaseOptions = {
         schema: 'public',
