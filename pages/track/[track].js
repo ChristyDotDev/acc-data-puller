@@ -20,8 +20,10 @@ export default function Track({ bestLaps, cars }) {
 
   function toLapTime(millis){
     const time = new Date(millis)
-    console.log(time)
-    return "" + time.getMinutes() + ":"+ time.getSeconds() + ":"+ time.getMilliseconds();
+    const minutes = "" + time.getMinutes()
+    const seconds = "" + time.getSeconds()
+    const milliPart = "" + time.getMilliseconds()
+    return "" + minutes + ":"+ seconds.padStart(2, '0') + ":"+ milliPart.padStart(2, '0');
   }
 
   return (
