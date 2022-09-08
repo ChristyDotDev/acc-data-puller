@@ -1,4 +1,4 @@
-name: Kickoff Poller
+name: Poll Results
 
 on:
   schedule:
