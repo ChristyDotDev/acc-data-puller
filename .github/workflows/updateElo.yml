@@ -1,4 +1,4 @@
-name: Parse Files
+name: Update Elo
 
 on:
   schedule:
