@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Call file parser lambda
+      id: parserRequest
       uses: fjogeleit/http-request-action@master
       with:
         url:  '${{ secrets.API_ROOT }}/parseFiles'
@@ -20,5 +21,5 @@ jobs:
         timeout: 30000
     - name: Print Response
       run: |
-        echo ${{ steps.myRequest.outputs.response }}
-        echo ${{ steps.myRequest.outputs.headers }}
+        echo ${{ steps.parserRequest.outputs.response }}
+        echo ${{ steps.parserRequest.outputs.headers }}
