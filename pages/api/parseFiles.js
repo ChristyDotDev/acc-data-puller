@@ -39,7 +39,7 @@ export default async function handler(req, res) {
 
   console.log(results_files)
 
-  const promise = results_files.forEach(async (file) => {
+  const resultsPromise = results_files.forEach(async (file) => {
     const fileContents = await getFileContents(file.id)
     console.log(fileContents?.laps?.length)
     if (fileContents?.sessionType?.startsWith('FP') & fileContents?.laps?.length > 0){
@@ -78,8 +78,9 @@ export default async function handler(req, res) {
       console.log(error)
     }
     console.log(updated)
+    return;
   });
-  await promise;
+  await resultsPromise;
 
   res.status(200).json({ status: "OK" });
   return;
