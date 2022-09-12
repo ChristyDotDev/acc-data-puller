@@ -83,5 +83,4 @@ export default async function handler(req, res) {
   await resultsPromise;
 
   res.status(200).json({ status: "OK" });
-  return;
 }

@@ -128,6 +128,6 @@ export default async function handler(req, res) {
     });
     await resultsPromise;
     console.log("Updated Elo Ratings")
-    await res.status(200).send();
+    res.status(200).send();
     return;
 }
