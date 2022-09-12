@@ -18,5 +18,3 @@ jobs:
         url:  '${{ secrets.API_ROOT }}/parseFiles'
         method: 'GET'
         timeout: 30000
-        preventFailureOnNoResponse: true
-        ignoreStatusCodes: '500'
