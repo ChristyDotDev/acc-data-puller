@@ -80,5 +80,5 @@ export default async function handler(req, res) {
     console.log(updated)
   });
 
-  res.status(200).json({ status: "OK" });
+  res.status(200).json({ status: "OK" }).send();
 }
