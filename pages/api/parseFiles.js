@@ -29,6 +29,8 @@ export default async function handler(req, res) {
   }
   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, supabaseOptions)
 
+  console.log("getting files from DB")
+
   const { data: results_files, error } = await supabase
     .from('results_files')
     .select("*")
