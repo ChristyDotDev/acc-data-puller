@@ -3,6 +3,7 @@ const stream = require('stream');
 import { createClient } from '@supabase/supabase-js'
 
 async function getFileContents(filename){
+  console.log("Getting file: " + filename)
   const client = new ftp.Client()
     await client.access({
         secure: process.env.RACE_DATA_FTP_SECURE == 'false' ? false : true,
