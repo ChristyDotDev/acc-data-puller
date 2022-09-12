@@ -75,7 +75,7 @@ export default async function handler(req, res) {
     const results_files = await getResultsFiles(supabase);
     const eloBefore = await getDriverElo(supabase);
 
-    results_files.forEach(async (file) => {
+    results_files.forEach((file) => {
         const fileContents = await getFileContents(file.id)
         console.log(`${fileContents.sessionType} @ ${fileContents.trackName}`);
         if(!fileContents?.sessionType?.startsWith('R')){
@@ -126,5 +126,6 @@ export default async function handler(req, res) {
         markFileDone(supabase, file.id);
     });
     console.log("Updated Elo Ratings")
-    await res.status(200).send();
+    await res.status(200);
+    return;
 }
