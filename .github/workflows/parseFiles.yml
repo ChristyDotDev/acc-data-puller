@@ -18,3 +18,7 @@ jobs:
         url:  '${{ secrets.API_ROOT }}/parseFiles'
         method: 'GET'
         timeout: 30000
+    - name: Print Response
+      run: |
+        echo ${{ steps.myRequest.outputs.response }}
+        echo ${{ steps.myRequest.outputs.headers }}
