@@ -1,8 +1,8 @@
-name: Parse Files
+name: Update Elo
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/5 * * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
