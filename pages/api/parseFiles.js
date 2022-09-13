@@ -13,6 +13,9 @@ async function getFileContents(filename){
         password: `${process.env.RACE_DATA_FTP_PASS}`,
         secureOptions: {rejectUnauthorized:false}
     })
+    .then(res => console.log("FTP Access Successful"))
+    .catch(err => console.log(err));
+    
     let fileContents = "";
     const writable = new stream.Writable({
       write: function(chunk, encoding, next) {
