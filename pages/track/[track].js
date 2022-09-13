@@ -40,7 +40,7 @@ export default function Track({ bestLaps, cars }) {
         <Tbody>
           {bestLaps.map((l) => (
             <Tr key={l.driver_short_name}>
-              <Td>{l.driver_first_name} {l.driver_last_name}</Td>
+              <Td>{l.driver_first_name} {l.driver_last_name} {l.session_is_wet ? "(W)":""}</Td>
               <Td>{idToCarName(l.carModel)}</Td>
               <Td fontWeight="bold">{toLapTime(l.bestLap)}</Td>
             </Tr>
