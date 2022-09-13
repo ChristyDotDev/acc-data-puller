@@ -64,6 +64,6 @@ export default async function handler(req, res) {
   } finally {
     client.close();
   }
-  res.status(200).json({ status: "OK" }).send();
+  res.status(200).json({ status: "OK" });
   return;
 }
