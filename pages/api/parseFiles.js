@@ -15,7 +15,7 @@ async function getFileContents(filename){
     })
     .then(res => console.log("FTP Access Successful"))
     .catch(err => console.log(err));
-    
+
     let fileContents = "";
     const writable = new stream.Writable({
       write: function(chunk, encoding, next) {
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
   const resultsPromise = results_files.forEach(async (file) => {
     const fileContents = await getFileContents(file.id)
     console.log(fileContents?.laps?.length)
-    if (fileContents?.sessionType?.startsWith('FP') & fileContents?.laps?.length > 0){
+    if (fileContents?.laps?.length > 0){
       const ttEntries = fileContents.sessionResult.leaderBoardLines.map((line) => {
         const timeTrialEntry = {
           session_track: fileContents.trackName,
